@@ -37,7 +37,7 @@ namespace DepartmentApp.Controllers
                     mySqlCon.Close();
                 }
             }
-            return Json(table);
+            return Json("Departments listed successfully.");
         }
 
         [HttpPost]
@@ -61,7 +61,7 @@ namespace DepartmentApp.Controllers
                     mySqlCon.Close();
                 }
             }
-            return Json(table);
+            return Json("Department added successfully.");
         }
 
         [HttpPut]
@@ -88,15 +88,14 @@ namespace DepartmentApp.Controllers
                     mySqlCon.Close();
                 }
             }
-            return Json(table);
+            return Json("Department updated successfully.");
         }
 
         [HttpDelete]
-        public JsonResult RemoveDepartment(Department dep)
+        public JsonResult RemoveDepartment(int departmentId)
         {
             string query = @"
-            Delete dbo.Department 
-            set DepartmentName = @DepartmentName
+            Delete from dbo.Department 
             where DepartmentId=@DepartmentId
             ";
             DataTable table = new DataTable();
@@ -107,15 +106,14 @@ namespace DepartmentApp.Controllers
                 mySqlCon.Open();
                 using (SqlCommand sqlCommand = new SqlCommand(query, mySqlCon))
                 {
-                    sqlCommand.Parameters.AddWithValue("@DepartmentId", dep.DepartmentId);
-                    sqlCommand.Parameters.AddWithValue("@DepartmentName", dep.DepartmentName);
+                    sqlCommand.Parameters.AddWithValue("@DepartmentId", departmentId);
                     sqlReader = sqlCommand.ExecuteReader();
                     table.Load(sqlReader);
                     sqlReader.Close();
                     mySqlCon.Close();
                 }
             }
-            return Json(table);
+            return Json("Department removed successfully.");
         }
     }
 }
